@@ -1,0 +1,27 @@
+# Render Blueprint for the API (https://render.com/docs/blueprint-spec).
+# The database is NOT created here: point ConnectionStrings__Default at a managed Postgres
+# (Neon free tier recommended, see docs/deployment.md). Secrets are entered in the dashboard (sync: false).
+services:
+  - type: web
+    name: seatline-api
+    runtime: docker
+    rootDir: api
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: frankfurt
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Default
+        sync: false
+      - key: Jwt__SigningKey
+        generateValue: true
+      - key: Seed__DemoUsers
+        value: "true"
+      - key: Seed__DemoPassword
+        sync: false
+      - key: Cors__AllowedOrigins__0
+        sync: false
